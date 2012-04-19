@@ -1,0 +1,23 @@
+LoadModule ispmgr_module /usr/local/ispmgr/lib/apache/mod_ispmgr.so
+
+Alias /manager /usr/local/ispmgr/bin/
+Alias /manimg/ /usr/local/ispmgr/skins/
+Alias /disabled/ /usr/local/ispmgr/www/disabled/
+Alias /mancgi/ /usr/local/ispmgr/cgi/
+
+<Directory /usr/local/ispmgr/>
+        Order allow,deny
+        Allow from all
+        AddDefaultCharset utf-8
+</Directory>
+
+<Directory /usr/local/ispmgr/cgi/>
+        SetHandler directcgi-handler
+        AddDefaultCharset utf-8
+</Directory>
+
+<Directory /usr/local/ispmgr/bin/>
+        SetHandler ispwrap-handler
+        AddDefaultCharset utf-8
+        DirectoryIndex ispmgr billmgr vdsmgr dsmgr dnsmgr ipmgr
+</Directory>

@@ -1,0 +1,27 @@
+server {
+        listen <%= @ip %>:443;
+        server_name <%= @ip %>;
+        ssl on;
+        ssl_certificate /usr/local/ispmgr/etc/manager.crt;
+        ssl_certificate_key /usr/local/ispmgr/etc/manager.key;
+        set $mgr_proxy http://<%= @ip %>:1500;
+        location / {
+                proxy_pass $mgr_proxy;
+                proxy_redirect $mgr_proxy /;
+                proxy_set_header Host $host:$server_port;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Real-IP $remote_addr;
+        }
+        location /manimg/ {
+                alias /usr/local/ispmgr/skins/;
+        }
+#        location ~* ^/(webstat|awstats|webmail|myadmin|pgadmin)/ {
+#                proxy_pass http://78.108.94.72:81;
+#                proxy_redirect http://78.108.94.72:81/ /;
+#                proxy_set_header Host $host;
+#                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#                proxy_set_header X-Forwarded-Proto $scheme;
+#                proxy_set_header X-Real-IP $remote_addr;
+#        }
+}

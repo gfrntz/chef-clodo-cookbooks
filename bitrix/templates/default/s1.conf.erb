@@ -1,0 +1,23 @@
+server {
+                include         bx/node_port.conf;
+                include         bx/node_host.conf;
+                server_name_in_redirect off;
+
+                proxy_set_header   X-Real-IP        $remote_addr;
+                proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+                proxy_set_header Host $host:80;
+                set $proxyserver "http://127.0.0.1:8888";
+                index index.php;
+                root /home/bitrix/www;
+
+                if ($request_uri = /manager) {
+                #       rewrite ^ http://<%= @ip %>:1500;
+		break;
+                }
+
+                if (-f /home/bitrix/www/.htsecure) {
+                        rewrite ^(.*)$ https://$host$1 permanent;
+                }
+
+                include bx/conf/bitrix.conf;
+}

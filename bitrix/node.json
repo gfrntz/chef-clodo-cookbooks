@@ -1,0 +1,6 @@
+{
+ "bitrix" : {
+                "sitename": ["bitrix-test.ru"],
+		"rootpw": ["bEbFa4b0an"]},
+ "run_list": [ "recipe[bitrix]", "recipe[bitrix::isp]" ]
+}

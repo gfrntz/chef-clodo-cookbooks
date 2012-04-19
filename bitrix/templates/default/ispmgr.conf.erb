@@ -1,0 +1,125 @@
+Option NoMysqlQuota
+
+
+Preset "Example package" {
+        Owner root
+        Disk 500
+        Mail 100
+        Ftp 10
+        Domain 5
+        WebDomain 2
+        MailDomain 10
+        Database 10
+        DatabaseUser 2
+        Bandwidth 100000
+        CGI on
+        PHP mod cgi
+        SSI on
+        FRP off
+        SSL off
+        Shell off
+}
+
+Mirror http://ru.download.ispsystem.com/
+Release current
+LicIp <%= @ip %> 
+extaction mindterm /mancgi/mindterm
+PluginSource http://download.ispsystem.com/plugins/ispmgr_plugins.xml
+PluginSource http://usings.ru/isp_plugins/ispmgr_plugins.xml
+path db4  /usr/bin/db_dump -p /etc/sasldb2
+ApacheVersion  2
+path DefaultHomeDir  /var/www
+path httpd.conf  /etc/httpd/conf/httpd.conf
+path httpd  /usr/sbin/apachectl
+path apachectl  /usr/sbin/apachectl start
+Service "HTTP" {
+        Confname httpd
+        Monitored NO
+        Process httpd
+        Start /etc/rc.d/init.d/httpd start
+        Stop /etc/rc.d/init.d/httpd stop
+        Type www
+}
+
+Service "MySQL" {
+        Confname mysqld
+        Monitored NO
+        Process mysqld
+        Start /etc/rc.d/init.d/mysqld start
+        Stop /etc/rc.d/init.d/mysqld stop
+        Type mysql
+        Ip /var/lib/mysql/mysql.sock
+}
+
+Service "Nginx" {
+        Process nginx
+        Start /etc/rc.d/init.d/nginx start
+        Stop /etc/rc.d/init.d/nginx stop
+        ConfName nginx
+        Type process
+        Monitored NO
+}
+
+
+ApacheProcName  httpd
+ApacheUid  48
+ApacheGid  48
+path php-configs  /usr/local/zend/etc/conf.d
+path phpbinary  /usr/bin/php
+path php.ini  /usr/local/zend/etc/php.ini
+DbServer "MySQL" {
+        Owner __Owner__
+        AccessType allow
+        ChangePassword 2012-04-04
+        Hostname localhost
+        Password <%= @bitrix[:rootpw] %>
+        SockPath /var/lib/mysql/mysql.sock
+        Type mysql
+        User root
+}
+path iptables  /etc/sysconfig/iptables
+path ndc  /usr/sbin/rndc
+path named-checkzone  /usr/sbin/named-checkzone
+path named.conf  /etc/named.conf
+path DomainZonesPath  /var/named
+path DomainSlaveZonesPath  
+NameServers  ns1.clodo.ru. ns2.clodo.ru.
+MailServers  mail mail
+DefaultLogAnalyzer none
+RotateError rotated
+WarnPasswdPeriod 0
+RootPasswdChanged 2012-02-11
+NamedUID  25
+NamedGID  25
+Account "bitrix" {
+        BandwidthLimit 100000000
+        CGI on
+        DatabaseLimit 10000
+        DatabaseUserLimit 10000
+        DomainLimit 10000
+        FtpLimit 10000
+        MailDomainLimit 10000
+        MailLimit 10000
+        PHP mod cgi 
+        Preset custom
+        SSI on
+        SSL on
+        WebDomainLimit 10000
+        WSGI off
+        DiskLimit 10000
+        BandwidthUsage 0
+}
+
+Option Procmail
+Option MailDir
+path exim-passwd  /etc/exim/passwd
+path exim-virtualdomains  /etc/exim/domains
+path aliases  /etc/exim/aliases
+path exim-pipealiases  /etc/exim/pipe-aliases
+path exim-dnsblists  /etc/exim/dnsblists
+path exim-whitelist  /etc/exim/whitelist
+path exim-blacklist  /etc/exim/blacklist
+MTA  exim
+EximAuth  sasl
+path dovecot.passwd  /etc/dovecot.passwd
+POP3  dovecot
