@@ -48,7 +48,7 @@ template "/usr/local/ispmgr/etc/ispmgr.conf" do
     mode "0600"
     owner "root"
     group "root"
-    variables (:ip=> #{ipif})	
+    variables ( :ip => "#{ipif}" )	
 end
 
 execute "set mysql rootpw" do
@@ -67,7 +67,7 @@ template "/usr/local/ispmgr/etc/nginx.domain" do
     mode "0644"
     owner "root"
     group "root"
-    variables ( :ip => #{ipif} )
+    variables ( :ip => "#{ipif}" )
 end
 
 template "/usr/local/ispmgr/etc/nginx.inc" do
@@ -75,14 +75,14 @@ template "/usr/local/ispmgr/etc/nginx.inc" do
     mode "0644"
     owner "root"
     group "root"
-    variables ( :ip => #{ipif} )
+    variables ( :ip => "#{ipif}" )
 end
 
 execute "pkgctl -D cache" do
     command "/usr/local/ispmgr/sbin/pkgctl -D cache"
 end
 
-%w{db4 dns fw ntp quota tar unzip zip apache nginx mysql}.each do |pkg|
+%w{db4 dns fw ntp quota tar unzip zip apache nginx}.each do |pkg|
   execute "pkgctl -D activate #{pkg}" do
     command "/usr/local/ispmgr/sbin/pkgctl -D activate #{pkg}"
   end

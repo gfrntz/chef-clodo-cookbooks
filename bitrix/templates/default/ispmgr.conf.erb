@@ -72,7 +72,7 @@ DbServer "MySQL" {
         AccessType allow
         ChangePassword 2012-04-04
         Hostname localhost
-        Password <%= @bitrix[:rootpw] %>
+        Password <%= node[:bitrix][:rootpw] %>
         SockPath /var/lib/mysql/mysql.sock
         Type mysql
         User root
@@ -109,6 +109,26 @@ Account "bitrix" {
         DiskLimit 10000
         BandwidthUsage 0
 }
+
+Account "user" {
+        BandwidthLimit 100000000
+        CGI on
+        DatabaseLimit 10000
+        DatabaseUserLimit 10000
+        DomainLimit 10000
+        FtpLimit 10000
+        MailDomainLimit 10000
+        MailLimit 10000
+        PHP mod cgi
+        Preset custom
+        SSI on
+        SSL on
+        WebDomainLimit 10000
+        WSGI off
+        DiskLimit 10000
+        BandwidthUsage 0
+}
+
 
 Option Procmail
 Option MailDir
