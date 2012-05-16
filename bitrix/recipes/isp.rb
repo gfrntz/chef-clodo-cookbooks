@@ -86,8 +86,13 @@ end
 
 ruby_block "find mysql pass" do
     block do
-      str = open('ispmgr.conf').grep(/\sPassword\ [a-zA-Z0-9]/)
-      pass = str.to_s.chomp.gsub(/^\s*Password./,"")
+      begin
+	      str = open('ispmgr.conf').grep(/\sPassword\ [a-zA-Z0-9]/)
+	      pass = str.to_s.chomp.gsub(/^\s*Password./,"")
+      rescue
+	      puts "I have some errors in read and parse ispmgr.conf"
+      end
+
     end
   action :create
 end
