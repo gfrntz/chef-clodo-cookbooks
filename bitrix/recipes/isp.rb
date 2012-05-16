@@ -51,10 +51,6 @@ template "/usr/local/ispmgr/etc/ispmgr.conf" do
     variables ( :ip => "#{ipif}" )	
 end
 
-execute "set mysql rootpw" do
-    command "mysqladmin -u root password #{node[:bitrix][:rootpw]}"
-end
-
 cookbook_file "/usr/local/ispmgr/etc/ispmgr.inc" do
   source "ispmgr.inc"
   mode 0444
@@ -82,10 +78,29 @@ execute "pkgctl -D cache" do
     command "/usr/local/ispmgr/sbin/pkgctl -D cache"
 end
 
-%w{db4 dns fw ntp quota tar unzip zip apache nginx}.each do |pkg|
+%w{db4 dns fw ntp quota tar unzip zip apache nginx mysql}.each do |pkg|
   execute "pkgctl -D activate #{pkg}" do
     command "/usr/local/ispmgr/sbin/pkgctl -D activate #{pkg}"
   end
+end
+
+ruby_block "find mysql pass" do
+    block do
+      str = open('ispmgr.conf').grep(/\sPassword\ [a-zA-Z0-9]/)
+      pass = str.to_s.chomp.gsub(/^\s*Password./,"")
+    end
+  action :create
+end
+
+execute "set mysql rootpw" do
+    command "mysqladmin -u root password #{pass}"
+end
+
+ruby_block "change bitrix pass" do
+    block do
+      Тут что-то делаем
+    end
+  action :create
 end
 
 execute "install exim" do
