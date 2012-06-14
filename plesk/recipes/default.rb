@@ -6,7 +6,7 @@ remote_file "/tmp/one-click-installer" do
 	backup 0
 end
 
-remote_file "/tmp/PLESK-key"
+remote_file "/tmp/PLESK-key" do
 	source "http://some source"
 	owner "root"
 	group "root"
@@ -23,6 +23,7 @@ directory "/var/lib/plesk-billing/tmp" do
 	group "root"
 	mode 0755
 	action :create
+	recursive true
 end
 
 service "apache2" do
