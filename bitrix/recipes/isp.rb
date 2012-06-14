@@ -90,20 +90,18 @@ ruby_block "find mysql pass" do
 	      str = open('ispmgr.conf').grep(/\sPassword\ [a-zA-Z0-9]/)
 	      pass = str.to_s.chomp.gsub(/^\s*Password./,"")
       rescue
-	      puts "I have some errors in read and parse ispmgr.conf"
+	      Chef::Log.info("I have some errors in read and parse ispmgr.conf")
       end
 
     end
   action :create
 end
 
-execute "set mysql rootpw" do
-    command "mysqladmin -u root password #{pass}"
-end
-
 ruby_block "change bitrix pass" do
     block do
-      Тут что-то делаем
+      text = File.read("/home/bitrix/www/bitrix/php_interface/dbconn.php")
+      replace = text.to_s.gsub(/\$DBPassword\ \= \"\"/, "\$DBPassword\ =\ \"#{pass}\"")
+      File.open("dbconn.php", "w") {|file| file.puts replace}
     end
   action :create
 end
